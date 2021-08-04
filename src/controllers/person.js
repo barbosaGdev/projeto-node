@@ -33,6 +33,7 @@ const controller = {
 
     const { name, address, phone, email } = req.body;
 
+
     try {
       const personInserted = await person.insertOne({
         name,
@@ -41,7 +42,9 @@ const controller = {
         email,
       });
 
-      res.status(httpStatus.OK).json(personInserted);
+      const newPerson = await person.findById(personInserted)
+
+      res.status(httpStatus.OK).json(newPerson);
     } catch (error) {
       res.status(httpStatus.INTERNAL_SERVER_ERROR).json(error);
     }
@@ -76,11 +79,11 @@ const controller = {
     try {
       const personWillDelete = await person.findById(id);
 
-      await person.delete(id, { name, address, phone, email });
+      await person.delete(id);
 
-      res
-        .status(httpStatus.OK)
-        .json(`${personWillDelete.name} foi excluído (a) da base de dados`);
+      res.status(httpStatus.OK).json({
+        message: `${personWillDelete.name} foi excluído (a) da base de dados`,
+      });
     } catch (error) {
       res.status(httpStatus.INTERNAL_SERVER_ERROR).json(error);
     }

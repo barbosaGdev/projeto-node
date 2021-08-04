@@ -1,4 +1,5 @@
 const MongoDb = require("mongodb");
+const secrets = require("../../secrets.json");
 
 class Database {
   constructor() {
@@ -7,11 +8,10 @@ class Database {
   }
 
   async _getMongoClientAndCollection() {
-    const client = await this.mongoClient.connect(process.env.MONGO_URI, {
+    const client = await this.mongoClient.connect(secrets.mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-
 
     const database = client.db();
     const collection = database.collection(this.collection);
@@ -25,13 +25,14 @@ class Database {
 
       if (!collection) reject();
 
-
       collection.insertOne(objectToInsert, (error, document) => {
         if (error) reject(error);
 
         client.close();
 
-        resolve(document.ops[0]);
+        console.log(document)
+
+        resolve(document.insertedId);
       });
     });
   }
@@ -77,7 +78,7 @@ class Database {
       collection.findOneAndUpdate(
         { _id: MongoDb.ObjectId(userId) },
         { $set: objectToUpdate },
-        { returnOriginal: false },
+        { returnDocument: 'after' },
         (error, document) => {
           if (error) reject(error);
 
