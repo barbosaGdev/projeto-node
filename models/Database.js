@@ -12,6 +12,7 @@ class Database {
       useUnifiedTopology: true,
     });
 
+
     const database = client.db();
     const collection = database.collection(this.collection);
 
@@ -23,6 +24,7 @@ class Database {
       const { client, collection } = await this._getMongoClientAndCollection();
 
       if (!collection) reject();
+
 
       collection.insertOne(objectToInsert, (error, document) => {
         if (error) reject(error);
