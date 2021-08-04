@@ -1,0 +1,25 @@
+{
+  "name": "projeto-node",
+  "version": "1.0.0",
+  "description": "Projeto para eliminacao da materia de Programação de Scripts",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "http-status": "^1.5.0",
+    "mongodb": "^4.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/barbosaGdev/projeto-node.git"
+  },
+  "author": "Gabriel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/barbosaGdev/projeto-node/issues"
+  },
+  "homepage": "https://github.com/barbosaGdev/projeto-node#readme"
+}
