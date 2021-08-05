@@ -30,8 +30,6 @@ class Database {
 
         client.close();
 
-        console.log(document)
-
         resolve(document.insertedId);
       });
     });

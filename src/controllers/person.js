@@ -31,18 +31,29 @@ const controller = {
   async create(req, res) {
     const person = new Person();
 
-    const { name, address, phone, email } = req.body;
+    const { name, email, ...rest } = req.body;
 
+    const emailRegex = /\S+@\S+\.\S+/;
+
+    if (!name)
+      res
+        .status(httpStatus.BAD_REQUEST)
+        .json({ error: "O campo nome é obrigatório" });
+
+    if (!email) {
+      res
+        .status(httpStatus.BAD_REQUEST)
+        .json({ error: "O campo email é obrigatório" });
+    } else if (!emailRegex.test(email)) {
+      res
+        .status(httpStatus.BAD_REQUEST)
+        .json({ error: "Digite um email válido. " });
+    }
 
     try {
-      const personInserted = await person.insertOne({
-        name,
-        address,
-        phone,
-        email,
-      });
+      const personInserted = await person.insertOne({ name, email, ...rest });
 
-      const newPerson = await person.findById(personInserted)
+      const newPerson = await person.findById(personInserted);
 
       res.status(httpStatus.OK).json(newPerson);
     } catch (error) {
@@ -55,15 +66,25 @@ const controller = {
 
     const { id } = req.params;
 
-    const { name, address, phone, email } = req.body;
+    const { name, email, ...rest } = req.body;
+
+    if (!name)
+      res
+        .status(httpStatus.BAD_REQUEST)
+        .json({ error: "O campo nome é obrigatório" });
+
+    if (!email) {
+      res
+        .status(httpStatus.BAD_REQUEST)
+        .json({ error: "O campo email é obrigatório" });
+    } else if (!emailRegex.test(email)) {
+      res
+        .status(httpStatus.BAD_REQUEST)
+        .json({ error: "Email inválido" });
+    }
 
     try {
-      const personUpdated = await person.update(id, {
-        name,
-        address,
-        phone,
-        email,
-      });
+      const personUpdated = await person.update(id, req.body);
 
       res.status(httpStatus.OK).json(personUpdated);
     } catch (error) {
