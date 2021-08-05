@@ -66,6 +66,8 @@ const controller = {
 
     const { id } = req.params;
 
+    const emailRegex = /\S+@\S+\.\S+/;
+
     const { name, email, ...rest } = req.body;
 
     if (!name)
@@ -78,13 +80,11 @@ const controller = {
         .status(httpStatus.BAD_REQUEST)
         .json({ error: "O campo email é obrigatório" });
     } else if (!emailRegex.test(email)) {
-      res
-        .status(httpStatus.BAD_REQUEST)
-        .json({ error: "Email inválido" });
+      res.status(httpStatus.BAD_REQUEST).json({ error: "Email inválido" });
     }
 
     try {
-      const personUpdated = await person.update(id, req.body);
+      const personUpdated = await person.update(id, { name, email, ...rest });
 
       res.status(httpStatus.OK).json(personUpdated);
     } catch (error) {
